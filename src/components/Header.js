@@ -17,7 +17,7 @@ const Header = () => {
   return (
     <Flex
       h={20}
-      bg={"blue.100"} j
+      bg={"blue.50"} j
       justifyContent={"end"}
       alignItems={"center"}
       paddingRight={8}
