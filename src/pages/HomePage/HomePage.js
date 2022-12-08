@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Header from '../../components/Header'
-import { goToLoginPage } from '../../routes/coordinator'
+import { goToCreateRecipePage, goToLoginPage } from '../../routes/coordinator'
 import axios from 'axios'
 import { BASE_URL } from '../../constants/url'
-import { Flex, Heading } from '@chakra-ui/react'
+import { Button, Flex, Heading } from '@chakra-ui/react'
 import RecipeCard from './RecipeCard'
 import { GlobalContext } from '../../contexts/GlobalContext'
 
@@ -23,9 +23,13 @@ const HomePage = () => {
 
   useEffect(() => {
     if (!context.isAuth) {
-      fetchRecipes()
+      goToLoginPage(navigate)
     }
   }, [])
+
+  useEffect(()=>{
+    fetchRecipes()
+  },[])
 
   const fetchRecipes = async () => {
     try {
@@ -44,8 +48,11 @@ const HomePage = () => {
   return (
     <>
       <Header />
-      <Flex flexDirection="column" paddingTop={5}>
-        <Heading>Receitas Cookenu</Heading>
+      <Flex flexDir="column" paddingTop={12}>
+        <Flex justifyContent="space-between">
+          <Heading>Receitas Cookenu</Heading>
+          <Button onClick={() => goToCreateRecipePage(navigate)} colorScheme="blue">Criar nova receita</Button>
+        </Flex>
         <Flex wrap="wrap" justifyContent="space-between">
           {recipes.map((recipe) => {
             return <RecipeCard key={recipe.id} recipe={recipe} />
