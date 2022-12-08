@@ -13,13 +13,16 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import axios from 'axios';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {BASE_URL} from "../../constants/url"
 import { goToHomePage, goToSignupPage } from '../../routes/coordinator';
+import { GlobalContext } from '../../contexts/GlobalContext'
 
 const LoginPage = () => {
+  const context = useContext(GlobalContext)
   const navigate = useNavigate()
+
   const [isLoading, setIsLoading] = useState(false)
 
   const [form, setForm] = useState({
@@ -30,6 +33,12 @@ const LoginPage = () => {
   const onChangeForm = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
+
+  useEffect(()=>{
+    if(context.isAuth){
+      goToHomePage(navigate)
+    }
+  })
 
   const login = async () => {
     try {
@@ -43,6 +52,7 @@ const LoginPage = () => {
       )
       window.localStorage.setItem("cookenu-token", response.data.token)
       setIsLoading(false)
+      context.setIsAuth(true)
 
       goToHomePage(navigate)
     }
